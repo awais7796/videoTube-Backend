@@ -8,6 +8,7 @@ dotenv.config({
     path:"./.env"
 })
 const  PORT =process.env.PORT||4000;
+
 console.log(process.env.MONGODB_URL);
 
 connectDB(

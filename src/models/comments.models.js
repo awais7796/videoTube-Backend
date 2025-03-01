@@ -7,6 +7,21 @@ import mongoose,{Schema} from "mongoose";
   video objectId videos 
   owner objectId users
  */
-const userSchema=new Schema({},{timestamps:true})
+const commentSchema=new Schema({
+    content:{
+        type:String,
+        required:true
+    },
+    video:{
+         type:Schema.Types.ObjectId,
+        ref:"Video"
+    },
+    owner:{
+         type:Schema.Types.ObjectId,
+        ref:"user"
+    }
+},{
+    timestamps:true
+})
 
-export const User=mongoose.model("User",userSchema);
+export const Comment=mongoose.model("Comment",commentSchema);

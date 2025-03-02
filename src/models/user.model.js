@@ -1,4 +1,5 @@
 import mongoose,{Schema, Types} from "mongoose";
+import bcrypt from "bcrypt";
 /*
 _id string pk 
   watchhistory ObjectId videos
@@ -57,5 +58,22 @@ const userSchema=new Schema({
  
 
 },{timestamps:true})
+
+//for encrypting the pass first time and at modfication 
+userSchema.pre("save",async function (next){
+  if(!this.modified("password")) return next()
+  this.password= await bcrypt.hash(this.password,10);
+next();
+})
+
+//for password validation/ compariion 
+userSchema.methods.isPasswordCorrect=async function(password){
+  return await bcrypt.compare(password,this.password);
+}
+
+
+
+
+
 
 export const User=mongoose.model("User",userSchema);

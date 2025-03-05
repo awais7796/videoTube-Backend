@@ -1,5 +1,6 @@
 import mongoose,{Schema, Types} from "mongoose";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
 /*
 _id string pk 
   watchhistory ObjectId videos
@@ -70,6 +71,32 @@ next();
 userSchema.methods.isPasswordCorrect=async function(password){
   return await bcrypt.compare(password,this.password);
 }
+
+
+userSchema.methods.generateAccessToken=function(){
+  return jwt.sign({
+    __id : this.__id,
+    email :this.email,
+    fullName: this.fullName
+  },
+  process.env.ACCESS_TOKEN_SECRET,
+  {
+    expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+  }
+)
+}
+
+userSchema.methods.generateRefreshToken=function(){
+  return jwt.sign({
+    __id:this.__id
+  },
+process.env.REFRESH_TOKEN_SECRET,
+{
+  expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+}
+)
+}
+
 
 
 
